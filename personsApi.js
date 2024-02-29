@@ -19,10 +19,16 @@ const info = () => {
 
 const createPerson = (request, response) => {
   const body = request.body;
-
-  if (!body.name) {
+  const personExists = persons.find((p) => p.name === body.name);
+  if (personExists) {
     return response.status(400).json({
-      error: "name missing",
+      error:
+        "Given name already exists. Cannot create new record with same name.",
+    });
+  }
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "Name and number are mandatory fields.",
     });
   }
 
