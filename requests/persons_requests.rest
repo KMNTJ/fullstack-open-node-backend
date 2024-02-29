@@ -1,0 +1,31 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Ham Tonks",
+    "number": "555-3453451"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Tim Honks",
+    "number": "555-5209356"
+}
+
+###
+
+GET http://localhost:3001/api/persons
+
+###
+
+
+GET http://localhost:3001/api/persons/2
+
+###
+
+DELETE http://localhost:3001/api/persons/2
+
+###
