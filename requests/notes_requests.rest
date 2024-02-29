@@ -1,0 +1,28 @@
+GET http://localhost:3001/api/notes
+
+###
+
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "asd != dsa",
+    "important": true
+}
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "contenttypoed": "asd != dsa",
+    "important": true
+}
+
+###
+
+###
+
+###
+
+###
