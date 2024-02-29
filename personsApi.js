@@ -6,13 +6,15 @@ const generateId = () => {
   return maxId + 1;
 };
 
+const generateRandomId = () => {
+  return Math.round(Math.random() * 1000000);
+};
+
 const info = () => {
-  return (
-    `<div>
+  return `<div>
         <p>Phonebook has info for ${persons.length} people</p>
         <p>${new Date()}</p>
-    </div>`
-  )
+    </div>`;
 };
 
 const createPerson = (request, response) => {
@@ -25,7 +27,7 @@ const createPerson = (request, response) => {
   }
 
   const person = {
-    id: generateId(),
+    id: generateRandomId(),
     name: body.name,
     number: body.number,
   };
