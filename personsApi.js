@@ -55,6 +55,27 @@ const getPersons = (request, response) => {
   return response.json(persons);
 };
 
+const updatePerson = (request, response) => {
+  const incomingInformation = request.body;
+  console.log("incoming", incomingInformation);
+  const found = persons.find((pers) => pers.id === incomingInformation.id);
+  if (found) {
+    persons = persons.map((pers) =>
+      pers.id === incomingInformation.id
+        ? {
+            id: incomingInformation.id,
+            name: incomingInformation.name,
+            number: incomingInformation.number,
+          }
+        : pers
+    );
+    return response.json(incomingInformation)
+  }
+  else {
+    return response.status(404).end();
+  }
+};
+
 const deletePerson = (request, response) => {
   const id = Number(request.params.id);
   persons = persons.filter((n) => n.id !== id);
@@ -65,6 +86,7 @@ module.exports = {
   createPerson,
   getPerson,
   getPersons,
+  updatePerson,
   deletePerson,
   info,
 };
