@@ -9,10 +9,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "remove-dist":"IF EXIST \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset-node-backend\\dist\" RMDIR /s /q \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset-node-backend\\dist\"",
-    "build-and-copy":"cd ../harjoitukset && yarn run build && xcopy \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset\\dist\" \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset-node-backend\\dist\" /f /s /e /k /i",
-    "build:ui": "yarn remove-dist && yarn build-and-copy",
-    "deploy:full":"yarn build:ui && git add . && git commit -m \"scripted build commit\" && git push"
+    "cmd-remove-dist":"IF EXIST \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset-node-backend\\dist\" RMDIR /s /q \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset-node-backend\\dist\"",
+    "cmd-build-and-copy":"cd ../harjoitukset && yarn run build && xcopy \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset\\dist\" \"C:\\Users\\nurmituo\\työ\\Oma kehittyminen\\fullstackopen\\harjoitukset-node-backend\\dist\" /f /s /e /k /i",
+    "build:ui": "yarn cmd-remove-dist && yarn cmd-build-and-copy",
+    "scripted-commit-push":"git add . && git commit -m \"scripted build commit\" && git push",
+    "deploy:full":"yarn build:ui && yarn scripted-commit-push"
   },
   "dependencies": {
     "cors": "^2.8.5",
