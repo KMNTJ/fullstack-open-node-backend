@@ -1,21 +1,30 @@
+const PhoneNumber = require("./models/phoneNumber");
 let persons = require("./persons.json");
-
-const generateId = () => {
-  const maxId =
-    persons.length > 0 ? Math.max(...persons.map((note) => note.id)) : 0;
-  return maxId + 1;
-};
-
-const generateRandomId = () => {
-  return Math.round(Math.random() * 1000000);
-};
 
 const info = () => {
   return `<div>
-        <p>Phonebook has info for ${persons.length} people</p>
-        <p>${new Date()}</p>
-    </div>`;
+  <p>Phonebook has info for ${persons.length} people</p>
+  <p>${new Date()}</p>
+  </div>`;
 };
+
+const saveNumber = (newName, newNumber) => {
+  const phoneNumber = new PhoneNumber({
+    name: newName,
+    number: newNumber,
+  });
+  return phoneNumber.save();
+};
+
+const addPerson = (body) => saveNumber(body.name, body.number).then((result) => {
+  const person = {
+    id: result.id,
+    name: result.name,
+    number: result.number,
+  };
+  persons = persons.concat(person);
+  return person;
+});
 
 const createPerson = (request, response) => {
   const body = request.body;
@@ -32,13 +41,9 @@ const createPerson = (request, response) => {
     });
   }
 
-  const person = {
-    id: generateRandomId(),
-    name: body.name,
-    number: body.number,
-  };
-  persons = persons.concat(person);
-  return response.json(person);
+  addPerson(body).then(person => {
+    return response.json(person)
+  })
 };
 
 const getPerson = (request, response) => {
@@ -51,13 +56,18 @@ const getPerson = (request, response) => {
   }
 };
 
+const listAllNumbers = () => {
+  return PhoneNumber.find({});
+};
+
 const getPersons = (request, response) => {
-  return response.json(persons);
+  listAllNumbers().then((allNumbers) => {
+    return response.json(allNumbers);
+  });
 };
 
 const updatePerson = (request, response) => {
   const incomingInformation = request.body;
-  console.log("incoming", incomingInformation);
   const found = persons.find((pers) => pers.id === incomingInformation.id);
   if (found) {
     persons = persons.map((pers) =>
@@ -69,9 +79,8 @@ const updatePerson = (request, response) => {
           }
         : pers
     );
-    return response.json(incomingInformation)
-  }
-  else {
+    return response.json(incomingInformation);
+  } else {
     return response.status(404).end();
   }
 };
