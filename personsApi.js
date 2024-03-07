@@ -68,9 +68,11 @@ const getPerson = (request, response, next) => {
 };
 
 const getPersons = (request, response, next) => {
-  PhoneNumber.find({}).then((allNumbers) => {
-    return response.json(allNumbers).catch((error) => next(error));
-  });
+  PhoneNumber.find({})
+    .then((allNumbers) => {
+      return response.json(allNumbers);
+    })
+    .catch((error) => next(error));
 };
 
 const updatePerson = (request, response, next) => {
@@ -81,7 +83,11 @@ const updatePerson = (request, response, next) => {
     number: body.number,
   };
 
-  PhoneNumber.findByIdAndUpdate(request.params.id, updateWith, { new: true })
+  PhoneNumber.findByIdAndUpdate(request.params.id, updateWith, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((updatedInfo) => {
       response.json(updatedInfo);
     })
