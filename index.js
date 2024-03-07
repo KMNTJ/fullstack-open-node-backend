@@ -1,5 +1,6 @@
 require("dotenv").config();
 const requestLogger = require("./requestLogger");
+const errorHandler = require("./errorHandler");
 const personApi = require("./personsApi");
 const express = require("express");
 const morgan = require("morgan");
@@ -17,46 +18,36 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
-app.post("/api/persons", (request, response) => {
-  return personApi.createPerson(request, response);
+app.post("/api/persons", (request, response, next) => {
+  return personApi.createPerson(request, response, next);
 });
 
-app.put("/api/persons/:id", (request, response) => {
-  return personApi.updatePerson(request, response);
+app.put("/api/persons/:id", (request, response, next) => {
+  return personApi.updatePerson(request, response, next);
 });
 
 app.get("/api/persons/:id", (request, response, next) => {
   return personApi.getPerson(request, response, next);
 });
 
-app.get("/api/persons", (request, response) => {
-  return personApi.getPersons(request, response);
+app.get("/api/persons", (request, response, next) => {
+  return personApi.getPersons(request, response, next);
 });
 
-app.get("/api/info", (request, response) => {
-  return response.send(personApi.info(request, response));
+app.get("/api/info", (request, response, next) => {
+  return response.send(personApi.info(request, response, next));
 });
 
-app.delete("/api/persons/:id", (request, response) => {
-  return personApi.deletePerson(request, response);
+app.delete("/api/persons/:id", (request, response, next) => {
+  return personApi.deletePerson(request, response, next);
 });
 
 const unknownEndopoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
-app.use(unknownEndopoint)
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
-
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" });
-  }
-  next(error);
-};
-
-app.use(errorHandler);
+app.use(unknownEndopoint);
+app.use(errorHandler.errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

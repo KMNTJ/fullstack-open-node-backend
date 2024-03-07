@@ -16,18 +16,20 @@ const saveNumber = (newName, newNumber) => {
   return phoneNumber.save();
 };
 
-const addPerson = (body) =>
-  saveNumber(body.name, body.number).then((result) => {
-    const person = {
-      id: result.id,
-      name: result.name,
-      number: result.number,
-    };
-    persons = persons.concat(person);
-    return person;
-  });
+const addPerson = (body, next) =>
+  saveNumber(body.name, body.number)
+    .then((result) => {
+      const person = {
+        id: result.id,
+        name: result.name,
+        number: result.number,
+      };
+      persons = persons.concat(person);
+      return person;
+    })
+    .catch((error) => next(error));
 
-const createPerson = (request, response) => {
+const createPerson = (request, response, next) => {
   const body = request.body;
   const personExists = persons.find((p) => p.name === body.name);
   if (personExists) {
@@ -42,7 +44,7 @@ const createPerson = (request, response) => {
     });
   }
 
-  addPerson(body).then((person) => {
+  addPerson(body, next).then((person) => {
     return response.json(person);
   });
 };
@@ -59,13 +61,9 @@ const getPerson = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-const listAllNumbers = () => {
-  return PhoneNumber.find({});
-};
-
-const getPersons = (request, response) => {
-  listAllNumbers().then((allNumbers) => {
-    return response.json(allNumbers);
+const getPersons = (request, response, next) => {
+  PhoneNumber.find({}).then((allNumbers) => {
+    return response.json(allNumbers).catch((error) => next(error));
   });
 };
 
