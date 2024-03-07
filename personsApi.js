@@ -82,23 +82,6 @@ const updatePerson = (request, response, next) => {
       response.json(updatedInfo);
     })
     .catch((error) => next(error));
-
-  // const incomingInformation = request.body;
-  // const found = persons.find((pers) => pers.id === incomingInformation.id);
-  // if (found) {
-  //   persons = persons.map((pers) =>
-  //     pers.id === incomingInformation.id
-  //       ? {
-  //           id: incomingInformation.id,
-  //           name: incomingInformation.name,
-  //           number: incomingInformation.number,
-  //         }
-  //       : pers
-  //   );
-  //   return response.json(incomingInformation);
-  // } else {
-  //   return response.status(404).end();
-  // }
 };
 
 const deletePerson = (request, response, next) => {
