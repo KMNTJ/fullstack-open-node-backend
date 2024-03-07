@@ -1,11 +1,17 @@
 const PhoneNumber = require("./models/phoneNumber");
 let persons = require("./persons.json");
 
-const info = () => {
-  return `<div>
-  <p>Phonebook has info for ${persons.length} people</p>
-  <p>${new Date()}</p>
-  </div>`;
+const info = (request, response, next) => {
+  PhoneNumber.find({})
+    .then((result) => {
+      return response.send(
+        `<div>
+        <p>Phonebook has info for ${result.length} people</p>
+        <p>${new Date()}</p>
+        </div>`
+      );
+    })
+    .catch((error) => next(error));
 };
 
 const saveNumber = (newName, newNumber) => {

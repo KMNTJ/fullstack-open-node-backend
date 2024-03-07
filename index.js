@@ -35,7 +35,7 @@ app.get("/api/persons", (request, response, next) => {
 });
 
 app.get("/api/info", (request, response, next) => {
-  return response.send(personApi.info(request, response, next));
+  return personApi.info(request, response, next);
 });
 
 app.delete("/api/persons/:id", (request, response, next) => {
