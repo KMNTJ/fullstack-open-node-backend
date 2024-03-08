@@ -44,11 +44,6 @@ const createPerson = (request, response, next) => {
         "Given name already exists. Cannot create new record with same name.",
     });
   }
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: "Name and number are mandatory fields.",
-    });
-  }
 
   addPerson(body, next).then((person) => {
     return response.json(person);
