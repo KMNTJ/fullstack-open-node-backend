@@ -14,7 +14,11 @@
     "build:ui": "yarn cmd-remove-dist && yarn cmd-build-and-copy",
     "scripted-commit-push": "git add . && git commit -m \"scripted build commit\" && git push",
     "deploy:full": "yarn build:ui && yarn scripted-commit-push",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:fix": "yarn lint -- --fix",
+    "prettier": "npx prettier --check",
+    "prettier:fix": "yarn prettier -- --write",
+    "format": "yarn prettier:fix && yarn lint:fix"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -26,6 +30,8 @@
   "devDependencies": {
     "@stylistic/eslint-plugin-js": "^1.6.3",
     "eslint": "^8.57.0",
-    "nodemon": "^3.1.0"
+    "eslint-config-prettier": "^9.1.0",
+    "nodemon": "^3.1.0",
+    "prettier": "3.2.5"
   }
 }

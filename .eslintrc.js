@@ -24,7 +24,11 @@ module.exports = {
     'plugins': [
         '@stylistic/js'
     ],
-    'extends': 'eslint:recommended',
+    'extends': 
+    [
+        'eslint:recommended',
+        'prettier'
+    ],
     'rules': {
         'indent': [
             'error',
