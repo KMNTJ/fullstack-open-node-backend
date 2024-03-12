@@ -11,7 +11,7 @@ app.use(express.static("dist"));
 app.use(express.json());
 app.use(requestLogger.requestLogger);
 app.use(cors());
-morgan.token("body", function (req, res) {
+morgan.token("body", function (req) {
   return JSON.stringify(req.body);
 });
 app.use(

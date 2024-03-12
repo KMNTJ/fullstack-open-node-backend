@@ -91,7 +91,7 @@ const updatePerson = (request, response, next) => {
 
 const deletePerson = (request, response, next) => {
   PhoneNumber.findByIdAndDelete(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => next(error));
