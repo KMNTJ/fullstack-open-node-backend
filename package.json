@@ -15,11 +15,9 @@
     "scripted-commit-push": "git add . && git commit -m \"scripted build commit\" && git push",
     "deploy:full": "yarn build:ui && yarn scripted-commit-push",
     "lint": "eslint .",
-    "lint:fix": "yarn lint -- --fix",
-    "prettier2": "npx prettier --write",
+    "lint:fix": "yarn lint --fix",
     "prettier": "npx prettier --check",
-    "prettier:fix": "yarn prettier -- --write .",
-    "format2": "yarn prettier2 && yarn lint:fix",
+    "prettier:fix": "yarn prettier --write .",
     "format": "yarn prettier:fix && yarn lint:fix"
   },
   "dependencies": {
