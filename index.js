@@ -14,7 +14,7 @@ const blogSchema = mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema)
 
 const mongoUrl = process.env.MONGODB_BLOGLIST_APP_URI
-//const mongoUrl = 'mongodb://localhost/bloglist'
+
 mongoose.connect(mongoUrl)
 
 app.use(cors())
@@ -29,6 +29,7 @@ app.get('/api/blogs', (request, response) => {
 })
 
 app.post('/api/blogs', (request, response) => {
+  console.log('rb', request.body)
   const blog = new Blog(request.body)
 
   blog

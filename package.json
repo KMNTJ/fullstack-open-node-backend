@@ -6,6 +6,9 @@
   "author": "tuomas_nurminen@hotmail.com",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
