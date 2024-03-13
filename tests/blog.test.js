@@ -1,10 +1,33 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
+const dummyblogs = require('./testdata/dummyblogs')
 
 test('dummy returns one', () => {
   const blogs = []
 
   const result = listHelper.dummy(blogs)
   assert.strictEqual(result, 1)
+})
+
+describe('total likes:', () => {
+    // Setup
+    const listWithNoBLogs = dummyblogs.blogs_empty;
+    const listWithOneBLog = dummyblogs.blogs_single;
+    const listWithManyBLogs = dummyblogs.blogs_many;
+
+    test('when a list has no blogs then the total likes result equals to zero', () => {
+        const result = listHelper.totalLikes(listWithNoBLogs)
+        assert.strictEqual(result, 0)
+    })
+
+    test('when a list has only one blog then the total likes equals to the likes of just that one blog', () => {
+        const result = listHelper.totalLikes(listWithOneBLog)
+        assert.strictEqual(result, 2)
+    })
+
+    test('when a list has many blogs then the total likes result equals to the total likes of those', () => {
+        const result = listHelper.totalLikes(listWithManyBLogs)
+        assert.strictEqual(result, 36)
+    })
 })
