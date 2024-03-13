@@ -6,7 +6,7 @@ const dummyblogs = require("./testdata/dummyblogs");
 // Setup
 const listWithNoBLogs = dummyblogs.blogs_empty;
 const listWithOneBLog = dummyblogs.blogs_single;
-const listWithManyBLogs = dummyblogs.blogs_many;
+const listWithManyBlogs = dummyblogs.blogs_many;
 const favouriteBlog = dummyblogs.blogs_favourite;
 
 test("dummy returns one", () => {
@@ -28,14 +28,21 @@ describe("total likes:", () => {
   });
 
   test("when a list has many blogs then the total likes result equals to the total likes of those", () => {
-    const result = listHelper.totalLikes(listWithManyBLogs);
+    const result = listHelper.totalLikes(listWithManyBlogs);
     assert.strictEqual(result, 36);
   });
 });
 
 describe("favourite blog:", () => {
   test("when a list has many blogs a favourite blog is one of the possible many which have the most likes", () => {
-    const result = listHelper.favouriteBLog(listWithManyBLogs);
-    assert.strictEqual(result.toString(), favouriteBlog.toString());
+    const result = listHelper.favouriteBLog(listWithManyBlogs);
+    assert.strictEqual(JSON.stringify(result), JSON.stringify(favouriteBlog));
+  });
+});
+
+describe("most blogs", () => {
+  test("when a list of blogs has many blogs the blogger with the most blogs equals to the result", () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs);
+    assert.strictEqual(JSON.stringify(result), JSON.stringify(dummyblogs.blogs_has_most));
   });
 });

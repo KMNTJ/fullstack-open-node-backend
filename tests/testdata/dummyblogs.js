@@ -68,9 +68,15 @@ const blogs_favourite = {
   likes: 12,
 };
 
+const blogs_has_most = {
+  author: "Robert C. Martin",
+  blogs: 3,
+};
+
 module.exports = {
   blogs_empty,
   blogs_single,
   blogs_many,
   blogs_favourite,
+  blogs_has_most,
 };
