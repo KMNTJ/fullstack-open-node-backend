@@ -62,8 +62,15 @@ const blogs_single = [
 
 const blogs_empty = [];
 
+const blogs_favourite = {
+  title: "Canonical string reduction",
+  author: "Edsger W. Dijkstra",
+  likes: 12,
+};
+
 module.exports = {
   blogs_empty,
   blogs_single,
   blogs_many,
+  blogs_favourite,
 };

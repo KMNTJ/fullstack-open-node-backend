@@ -1,33 +1,41 @@
-const { test, describe } = require('node:test')
-const assert = require('node:assert')
-const listHelper = require('../utils/list_helper')
-const dummyblogs = require('./testdata/dummyblogs')
+const { test, describe } = require("node:test");
+const assert = require("node:assert");
+const listHelper = require("../utils/list_helper");
+const dummyblogs = require("./testdata/dummyblogs");
 
-test('dummy returns one', () => {
-  const blogs = []
+// Setup
+const listWithNoBLogs = dummyblogs.blogs_empty;
+const listWithOneBLog = dummyblogs.blogs_single;
+const listWithManyBLogs = dummyblogs.blogs_many;
+const favouriteBlog = dummyblogs.blogs_favourite;
 
-  const result = listHelper.dummy(blogs)
-  assert.strictEqual(result, 1)
-})
+test("dummy returns one", () => {
+  const blogs = [];
 
-describe('total likes:', () => {
-    // Setup
-    const listWithNoBLogs = dummyblogs.blogs_empty;
-    const listWithOneBLog = dummyblogs.blogs_single;
-    const listWithManyBLogs = dummyblogs.blogs_many;
+  const result = listHelper.dummy(blogs);
+  assert.strictEqual(result, 1);
+});
 
-    test('when a list has no blogs then the total likes result equals to zero', () => {
-        const result = listHelper.totalLikes(listWithNoBLogs)
-        assert.strictEqual(result, 0)
-    })
+describe("total likes:", () => {
+  test("when a list has no blogs then the total likes result equals to zero", () => {
+    const result = listHelper.totalLikes(listWithNoBLogs);
+    assert.strictEqual(result, 0);
+  });
 
-    test('when a list has only one blog then the total likes equals to the likes of just that one blog', () => {
-        const result = listHelper.totalLikes(listWithOneBLog)
-        assert.strictEqual(result, 2)
-    })
+  test("when a list has only one blog then the total likes equals to the likes of just that one blog", () => {
+    const result = listHelper.totalLikes(listWithOneBLog);
+    assert.strictEqual(result, 2);
+  });
 
-    test('when a list has many blogs then the total likes result equals to the total likes of those', () => {
-        const result = listHelper.totalLikes(listWithManyBLogs)
-        assert.strictEqual(result, 36)
-    })
-})
+  test("when a list has many blogs then the total likes result equals to the total likes of those", () => {
+    const result = listHelper.totalLikes(listWithManyBLogs);
+    assert.strictEqual(result, 36);
+  });
+});
+
+describe("favourite blog:", () => {
+  test("when a list has many blogs a favourite blog is one of the possible many which have the most likes", () => {
+    const result = listHelper.favouriteBLog(listWithManyBLogs);
+    assert.strictEqual(result.toString(), favouriteBlog.toString());
+  });
+});
