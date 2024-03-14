@@ -68,9 +68,14 @@ const blogs_favourite = {
   likes: 12,
 };
 
-const blogs_has_most = {
+const blogs_has_most_blogs = {
   author: "Robert C. Martin",
   blogs: 3,
+};
+
+const blogs_has_most_likes = {
+  author: "Edsger W. Dijkstra",
+  likes: 17,
 };
 
 module.exports = {
@@ -78,5 +83,6 @@ module.exports = {
   blogs_single,
   blogs_many,
   blogs_favourite,
-  blogs_has_most,
+  blogs_has_most_blogs,
+  blogs_has_most_likes,
 };
