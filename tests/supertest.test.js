@@ -74,6 +74,20 @@ test("a blog without title can not be added", async () => {
   assert.strictEqual(pristineBlogs.length, blogs.body.length);
 });
 
+function assertArrayObjectsHaveIdProperty(array) {
+  assert(Array.isArray(array), "Input is not an array");
+
+  array.forEach((obj) => {
+    assert(obj.hasOwnProperty("id"), 'Object does not have the "id" property');
+  });
+}
+
+test('blogs have a property called "id" by which the blog may be identified', async () => {
+  const blogs = await api.get("/api/blogs");
+
+  assertArrayObjectsHaveIdProperty(blogs.body);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
