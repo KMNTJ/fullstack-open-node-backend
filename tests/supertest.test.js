@@ -25,8 +25,6 @@ beforeEach(async () => {
 });
 
 test("blogs are returned as json", async () => {
-  const pristineBlogs = await THelper.BlogsOfDatabase();
-
   const response = await api
     .get("/api/blogs")
     .expect(200)
@@ -61,18 +59,32 @@ test("a valid blog can be added", async () => {
 test("a blog without title can not be added", async () => {
   const pristineBlogs = await THelper.BlogsOfDatabase();
 
-  const newBlog = {
+  const noTitleBlog = {
     title: "",
     author: "Schell F. Pobly-Shed",
     url: "https://www.foo.com",
     likes: "0",
   };
-
-  await api.post("/api/blogs").send(newBlog).expect(400);
+  
+  await api.post("/api/blogs").send(noTitleBlog).expect(400);
   const blogs = await api.get("/api/blogs");
-
   assert.strictEqual(pristineBlogs.length, blogs.body.length);
 });
+
+test("a blog without url can not be added", async () => {
+  const pristineBlogs = await THelper.BlogsOfDatabase();
+
+  const noUrlBlog = {
+    title: "Where is bloggo!",
+    author: "Schell F. Pobly-Shed",
+    url: "",
+    likes: "0",
+  };
+
+  await api.post("/api/blogs").send(noUrlBlog).expect(400);
+  const blogs = await api.get("/api/blogs");
+  assert.strictEqual(pristineBlogs.length, blogs.body.length);
+})
 
 function assertArrayObjectsHaveIdProperty(array) {
   assert(Array.isArray(array), "Input is not an array");
@@ -84,9 +96,20 @@ function assertArrayObjectsHaveIdProperty(array) {
 
 test('blogs have a property called "id" by which the blog may be identified', async () => {
   const blogs = await api.get("/api/blogs");
-
   assertArrayObjectsHaveIdProperty(blogs.body);
 });
+
+test('during the saving of a blog with no value on property "likes" the "likes" value will be set to 0', async () => {
+  const newBlog = {
+    title: "The latest buzz!",
+    author: "Schell F. Pobly-Shed",
+    url: "https://www.foo.com",
+    likes: null,
+  };  
+
+  const response = await api.post('/api/blogs').send(newBlog).expect(201);
+  assert(response.body.likes === 0);
+})
 
 after(async () => {
   await mongoose.connection.close();

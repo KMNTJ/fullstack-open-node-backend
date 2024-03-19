@@ -9,12 +9,15 @@ blogsRouter.get("/api/blogs", async (_, response) => {
 blogsRouter.post("/api/blogs", async (request, response) => {
   const blog = new Blog(request.body);
 
-  if (blog.title === "") {
+  if (blog.title == false || blog.url == false ) {
     response.status(400).end();
-  } else {
-    const result = await blog.save();
-    response.status(201).json(result);
+    return;
   }
+
+  blog.likes ??= 0;
+
+  const result = await blog.save();
+  response.status(201).json(result);
 });
 
 module.exports = {
