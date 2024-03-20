@@ -111,6 +111,17 @@ test('during the saving of a blog with no value on property "likes" the "likes" 
   assert(response.body.likes === 0);
 })
 
+test('an existing blog can be deleted', async () => {
+  const idToDeleteWith = dummyBlogs.blogs_many[0]._id;
+  await api.delete(`/api/blogs/${idToDeleteWith}`).expect(200);
+})
+
+test('attempt to delete non existing blog returns 404 not found', async () => {
+  const idToDeleteWith = dummyBlogs.blogs_many[0]._id;
+  await api.delete(`/api/blogs/${idToDeleteWith}`).expect(200);
+  await api.delete(`/api/blogs/${idToDeleteWith}`).expect(404);
+})
+
 after(async () => {
   await mongoose.connection.close();
 });

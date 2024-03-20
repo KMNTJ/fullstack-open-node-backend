@@ -47,3 +47,19 @@ Content-Type: application/json
   "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
   "likes": 0
 }
+
+###
+
+DELETE http://localhost:3003/api/blogs/5a422a851b54a676234d17f7
+
+//DELETE http://localhost:3003/api/blogs/hwm6n&Y%¤"VIBl45n)BK(JHVGVfdfhvjb
+
+
+###
+
+DELETE http://localhost:3003/api/blogs/65faa6c65426b5aa9701727e
+
+
+
+
+
