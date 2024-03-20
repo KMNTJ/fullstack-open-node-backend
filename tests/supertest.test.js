@@ -65,7 +65,7 @@ test("a blog without title can not be added", async () => {
     url: "https://www.foo.com",
     likes: "0",
   };
-  
+
   await api.post("/api/blogs").send(noTitleBlog).expect(400);
   const blogs = await api.get("/api/blogs");
   assert.strictEqual(pristineBlogs.length, blogs.body.length);
@@ -84,7 +84,7 @@ test("a blog without url can not be added", async () => {
   await api.post("/api/blogs").send(noUrlBlog).expect(400);
   const blogs = await api.get("/api/blogs");
   assert.strictEqual(pristineBlogs.length, blogs.body.length);
-})
+});
 
 function assertArrayObjectsHaveIdProperty(array) {
   assert(Array.isArray(array), "Input is not an array");
@@ -105,22 +105,58 @@ test('during the saving of a blog with no value on property "likes" the "likes" 
     author: "Schell F. Pobly-Shed",
     url: "https://www.foo.com",
     likes: null,
-  };  
+  };
 
-  const response = await api.post('/api/blogs').send(newBlog).expect(201);
+  const response = await api.post("/api/blogs").send(newBlog).expect(201);
   assert(response.body.likes === 0);
-})
+});
 
-test('an existing blog can be deleted', async () => {
+test("an existing blog can be deleted", async () => {
   const idToDeleteWith = dummyBlogs.blogs_many[0]._id;
   await api.delete(`/api/blogs/${idToDeleteWith}`).expect(200);
-})
+});
 
-test('attempt to delete non existing blog returns 404 not found', async () => {
+test("attempt to delete non existing blog returns 404 not found", async () => {
   const idToDeleteWith = dummyBlogs.blogs_many[0]._id;
   await api.delete(`/api/blogs/${idToDeleteWith}`).expect(200);
   await api.delete(`/api/blogs/${idToDeleteWith}`).expect(404);
-})
+});
+
+test("updating an existing blog returns the updated blog", async () => {
+  const originalBlogToUpdate = dummyBlogs.blogs_many[0];
+  const alteredBlog =
+    dummyBlogs.blogs_altered_blog_with_correct_fields_and_values;
+  const response = await api
+    .put(`/api/blogs/${originalBlogToUpdate._id}`)
+    .send(alteredBlog)
+    .expect(200);
+
+  assert(THelper.checkObjectHasOthersKVPairs(response.body, alteredBlog));
+  assert(originalBlogToUpdate._id === response.body.id);
+});
+
+test("updating of a blog while attempting to add a property not defined in the Blog schema will fail", async () => {
+  const originalBlogToUpdate = dummyBlogs.blogs_many[0];
+  const alteredBlog = dummyBlogs.blogs_altered_blog_with_an_extra_field;
+  await api
+    .put(`/api/blogs/${originalBlogToUpdate._id}`)
+    .send(alteredBlog)
+    .expect(400);
+});
+
+test("updating a subset of a blogs properties will not have an effect on the other properties of the blog", async () => {
+  const originalBlogToUpdate = dummyBlogs.blogs_many[0];
+  const alteredBlog =
+    dummyBlogs.blogs_altered_blog_with_a_subset_of_all_properties;
+  const response = await api
+    .put(`/api/blogs/${originalBlogToUpdate._id}`)
+    .send(alteredBlog)
+    .expect(200);
+
+  assert(response.body.url === originalBlogToUpdate.url);
+  assert(response.body.title === alteredBlog.title);
+  assert(response.body.id === originalBlogToUpdate._id);
+});
 
 after(async () => {
   await mongoose.connection.close();

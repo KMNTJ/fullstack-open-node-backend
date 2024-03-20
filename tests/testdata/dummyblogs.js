@@ -51,11 +51,11 @@ const blogs_many = [
 
 const blogs_single = [
   {
-    _id: "5a422bc61b54a676234d17fc",
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
+    _id: "5a422a851b54a676234d17f7",
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
     __v: 0,
   },
 ];
@@ -78,11 +78,33 @@ const blogs_has_most_likes = {
   likes: 17,
 };
 
+const blogs_altered_blog_with_correct_fields_and_values = {
+  title: "updated 1",
+  author: "updated 2",
+  url: "updated 3",
+  likes: 4,
+};
+
+const blogs_altered_blog_with_an_extra_field = {
+  title: "updated 1",
+  author: "updated 2",
+  url: "updated 3",
+  likes: 4,
+  thisIsAPropertyNotFoundInSchema: "it should fail the validation",
+};
+
+const blogs_altered_blog_with_a_subset_of_all_properties = {
+  title: "updated 1",
+};
+
 module.exports = {
   blogs_empty,
-  blogs_single,
   blogs_many,
+  blogs_single,
   blogs_favourite,
   blogs_has_most_blogs,
   blogs_has_most_likes,
+  blogs_altered_blog_with_correct_fields_and_values,
+  blogs_altered_blog_with_an_extra_field,
+  blogs_altered_blog_with_a_subset_of_all_properties,
 };
