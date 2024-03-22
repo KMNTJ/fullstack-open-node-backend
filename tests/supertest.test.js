@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require("node:test");
+const { test, after, beforeEach, describe } = require("node:test");
 const assert = require("node:assert");
 const mongoose = require("mongoose");
 const supertest = require("supertest");
@@ -6,6 +6,9 @@ const app = require("../app");
 const dummyBlogs = require("./testdata/dummyblogs");
 const Blog = require("../models/blog");
 const THelper = require("./test_helper");
+const bcrypt = require("bcrypt");
+const User = require("../models/user");
+const { stringify } = require("node:querystring");
 
 const api = supertest(app);
 let amountOfInitializedBlogsUnderTest;
@@ -156,6 +159,39 @@ test("updating a subset of a blogs properties will not have an effect on the oth
   assert(response.body.url === originalBlogToUpdate.url);
   assert(response.body.title === alteredBlog.title);
   assert(response.body.id === originalBlogToUpdate._id);
+});
+
+describe("when there is initially one user in the db", () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+
+    const passwordHash = await bcrypt.hash("supasekret", 12);
+    const user = new User({ username: "root", passwordHash });
+
+    await user.save();
+  });
+
+  test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await THelper.usersInDb()
+
+    const newUser = {
+      username: "Tim",
+      name: "Honks",
+      password: "fgump55"
+    }
+
+    await api.post('/api/users')
+    .send(newUser)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await THelper.usersInDb();
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    assert(usernames.includes(newUser.username))
+  })
+
 });
 
 after(async () => {

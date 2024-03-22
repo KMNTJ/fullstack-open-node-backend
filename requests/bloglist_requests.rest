@@ -67,6 +67,34 @@ Content-Type: application/json
 
 {
   "title": "updated 1",
-  "author": "updated 5",
+  "author": "updated 2",
+  "url": "updated 3",
   "likes": 4
 }
+
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "userName": "LissuLee",
+  "name": "Liisa Läntti",
+  "password": "crypt1c"
+}
+
+###
+
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "userName": "Jim Johnson",
+  "name": "Jalmari Jalonen",
+  "password": "s4lkku"
+}
+
+###
+
+GET http://localhost:3003/api/users

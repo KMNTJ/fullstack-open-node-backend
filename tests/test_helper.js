@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 const BlogsOfDatabase = async () => {
   const blogs = await Blog.find({});
@@ -29,4 +30,9 @@ const checkObjectHasOthersKVPairs = async (a, b) => {
   return true; // All properties and values match
 }
 
-module.exports = { BlogsOfDatabase, nonExistingId, checkObjectHasOthersKVPairs };
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map(u => u.toJSON())
+}
+
+module.exports = { BlogsOfDatabase, nonExistingId, checkObjectHasOthersKVPairs, usersInDb };
