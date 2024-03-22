@@ -10,8 +10,8 @@ usersRouter.get("/api/users", async (_, response) => {
 usersRouter.post("/api/users", async (request, response) => {
   const { username, name, password } = request.body;
 
-  if (username == false || name == false || password == false) {
-    response.status(400).end();
+  if (username?.length < 3 || name == false || password?.length < 3) {
+    response.status(400).json('username and password minimum length is 3');
     return;
   }
 

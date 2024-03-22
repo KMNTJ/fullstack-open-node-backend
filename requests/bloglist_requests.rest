@@ -97,4 +97,15 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "userName": "X",
+  "name": "Xibit",
+  "password": "yo"
+}
+
+###
+
 GET http://localhost:3003/api/users
