@@ -19,6 +19,7 @@ const user_with_too_short_password = {
 const user_a_non_existing_userId = "65faa6c65426b5aa97017280";
 const user_id_of_root = "21faa6c65426b5aa97017282";
 const user_username_root = "root";
+const user_password_of_root = "supasekret";
 
 module.exports = {
   user_that_shall_be_able_to_be_created,
@@ -26,5 +27,6 @@ module.exports = {
   user_with_too_short_username,
   user_a_non_existing_userId,
   user_id_of_root,
-  user_username_root
+  user_username_root,
+  user_password_of_root
 };
