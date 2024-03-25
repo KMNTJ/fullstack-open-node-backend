@@ -36,29 +36,6 @@ test("blogs are returned as json", async () => {
   assert(response.body.length === amountOfInitializedBlogsUnderTest);
 });
 
-test("a valid blog can be added", async () => {
-  const pristineBlogs = await THelper.BlogsOfDatabase();
-
-  const newBlog = {
-    title: "Mindhaze",
-    author: "Schell F. Pobly-Shed",
-    url: "https://www.foo.com",
-    likes: "12",
-  };
-
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
-
-  const response = await api.get("/api/blogs");
-  const titles = response.body.map((b) => b.title);
-
-  assert.strictEqual(response.body.length, pristineBlogs.length + 1);
-  assert(titles.includes("Mindhaze"));
-});
-
 test("a blog without title can not be added", async () => {
   const pristineBlogs = await THelper.BlogsOfDatabase();
 
@@ -100,18 +77,6 @@ function assertArrayObjectsHaveIdProperty(array) {
 test('blogs have a property called "id" by which the blog may be identified', async () => {
   const blogs = await api.get("/api/blogs");
   assertArrayObjectsHaveIdProperty(blogs.body);
-});
-
-test('during the saving of a blog with no value on property "likes" the "likes" value will be set to 0', async () => {
-  const newBlog = {
-    title: "The latest buzz!",
-    author: "Schell F. Pobly-Shed",
-    url: "https://www.foo.com",
-    likes: null,
-  };
-
-  const response = await api.post("/api/blogs").send(newBlog).expect(201);
-  assert(response.body.likes === 0);
 });
 
 test("an existing blog can be deleted", async () => {
@@ -166,7 +131,11 @@ describe("when there is initially one user in the db", () => {
     await User.deleteMany({});
 
     const passwordHash = await bcrypt.hash("supasekret", 12);
-    const user = new User({ username: "root", passwordHash });
+    const user = new User({
+      username: dummyUsers.user_username_root,
+      passwordHash: passwordHash,
+      _id: dummyUsers.user_id_of_root,
+    });
 
     await user.save();
   });
@@ -187,6 +156,43 @@ describe("when there is initially one user in the db", () => {
 
     const usernames = usersAtEnd.map((u) => u.username);
     assert(usernames.includes(newUser.username));
+  });
+
+  test("a valid blog can be added", async () => {
+    const pristineBlogs = await THelper.BlogsOfDatabase();
+
+    const newBlog = {
+      title: "Mindhaze",
+      author: "Schell F. Pobly-Shed",
+      url: "https://www.foo.com",
+      likes: "12",
+      userId: dummyUsers.user_id_of_root,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const response = await api.get("/api/blogs");
+    const titles = response.body.map((b) => b.title);
+
+    assert.strictEqual(response.body.length, pristineBlogs.length + 1);
+    assert(titles.includes("Mindhaze"));
+  });
+
+  test('during the saving of a blog with no value on property "likes" the "likes" value will be set to 0', async () => {
+    const newBlog = {
+      title: "The latest buzz!",
+      author: "Schell F. Pobly-Shed",
+      url: "https://www.foo.com",
+      likes: null,
+      userId: dummyUsers.user_id_of_root,
+    };
+  
+    const response = await api.post("/api/blogs").send(newBlog).expect(201);
+    assert(response.body.likes === 0);
   });
 });
 

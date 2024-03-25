@@ -1,23 +1,40 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 blogsRouter.get("/api/blogs", async (_, response) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate('userId');
   response.json(blogs);
 });
 
 blogsRouter.post("/api/blogs", async (request, response) => {
-  const blog = new Blog(request.body);
+  const { title, url, likes, author, userId } = request.body;
 
-  if (blog.title == false || blog.url == false) {
-    response.status(400).end();
+  if (![title, url, userId].every(Boolean)) {
+    response.status(400).json("missing title, url or userId");
     return;
   }
 
+  const creator = await User.findById(userId);
+  if (!creator) {
+    response.status(400).json("invalid userId");
+    return;
+  }
+
+  const blog = new Blog({
+    title: title,
+    url: url,
+    likes: likes,
+    author: author,
+    userId: creator._id,
+  });
   blog.likes ??= 0;
 
-  const result = await blog.save();
-  response.status(201).json(result);
+  const savedBlog = await blog.save();
+  creator.blogs = creator.blogs.concat(savedBlog._id);
+  await creator.save();
+
+  response.status(201).json(savedBlog);
 });
 
 blogsRouter.delete("/api/blogs/:id", async (request, response) => {

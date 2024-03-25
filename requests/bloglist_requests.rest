@@ -45,20 +45,10 @@ Content-Type: application/json
   "title": "TDD harms architecture",
   "author": "Robert C. Martin",
   "url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-  "likes": 0
+  "likes": 0,
+  // userId = Liisa Läntti
+  "userId": "65fd759e2f4a8d98ccfbb759"
 }
-
-###
-
-DELETE http://localhost:3003/api/blogs/5a422a851b54a676234d17f7
-
-//DELETE http://localhost:3003/api/blogs/hwm6n&Y%¤"VIBl45n)BK(JHVGVfdfhvjb
-
-
-###
-
-DELETE http://localhost:3003/api/blogs/65faa6c65426b5aa9701727e
-
 
 ###
 
@@ -79,7 +69,7 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "userName": "LissuLee",
+  "username": "LissuLee",
   "name": "Liisa Läntti",
   "password": "crypt1c"
 }
@@ -90,7 +80,7 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "userName": "Jim Johnson",
+  "username": "Jim Johnson",
   "name": "Jalmari Jalonen",
   "password": "s4lkku"
 }
@@ -101,7 +91,7 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "userName": "X",
+  "username": "X",
   "name": "Xibit",
   "password": "yo"
 }
