@@ -9,20 +9,22 @@ blogsRouter.get("/api/blogs", async (_, response) => {
 });
 
 blogsRouter.post("/api/blogs", async (request, response) => {
-  const { title, url, likes, author, userId } = request.body;
-
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token invalid" });
-  }
-  if (![title, url, decodedToken.id].every(Boolean)) {
-    return response.status(400).json("missing title, url or userId");
+  const { title, url, likes, author } = request.body;
+  if (![title, url].every(Boolean)) {
+    return response.status(400).json("missing title or url");
   }
 
-  const creator = await User.findById(decodedToken.id);
-  if (!creator) {
-    return response.status(400).json("invalid userId");
-  }
+  //const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  //if (!decodedToken.id) {
+  //  return response.status(401).json({ error: "token invalid" });
+  //}
+  //
+  //const creator = await User.findById(decodedToken.id);
+  //if (!creator) {
+  //  return response.status(400).json("invalid userId");
+  //}
+
+  const creator = request.user;
 
   const blog = new Blog({
     title: title,
@@ -35,15 +37,12 @@ blogsRouter.post("/api/blogs", async (request, response) => {
 
   const savedBlog = await blog.save();
   creator.blogs = creator.blogs.concat(savedBlog._id);
-  await creator.save();
 
   return response.status(201).json(savedBlog);
 });
 
 blogsRouter.delete("/api/blogs/:id", async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  const user = await User.findById(decodedToken.id);
-  const userBlogIds = user.blogs.map((b) => b._id.toString());
+  const userBlogIds = request.user.blogs.map((b) => b._id.toString());
 
   if (!userBlogIds.includes(request.params.id)) {
     return response.status(400).json({ error: "invalid deletion target" });
