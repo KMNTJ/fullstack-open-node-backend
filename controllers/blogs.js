@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 blogsRouter.get("/api/blogs", async (_, response) => {
   const blogs = await Blog.find({}).populate("userId");
-  response.json(blogs);
+  return response.json(blogs);
 });
 
 blogsRouter.post("/api/blogs", async (request, response) => {
@@ -16,14 +16,12 @@ blogsRouter.post("/api/blogs", async (request, response) => {
     return response.status(401).json({ error: "token invalid" });
   }
   if (![title, url, decodedToken.id].every(Boolean)) {
-    response.status(400).json("missing title, url or userId");
-    return;
+    return response.status(400).json("missing title, url or userId");
   }
 
   const creator = await User.findById(decodedToken.id);
   if (!creator) {
-    response.status(400).json("invalid userId");
-    return;
+    return response.status(400).json("invalid userId");
   }
 
   const blog = new Blog({
@@ -39,15 +37,23 @@ blogsRouter.post("/api/blogs", async (request, response) => {
   creator.blogs = creator.blogs.concat(savedBlog._id);
   await creator.save();
 
-  response.status(201).json(savedBlog);
+  return response.status(201).json(savedBlog);
 });
 
 blogsRouter.delete("/api/blogs/:id", async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  const user = await User.findById(decodedToken.id);
+  const userBlogIds = user.blogs.map((b) => b._id.toString());
+
+  if (!userBlogIds.includes(request.params.id)) {
+    return response.status(400).json({ error: "invalid deletion target" });
+  }
+
   const result = await Blog.findByIdAndDelete(request.params.id);
   if (result?.id === request.params.id) {
-    response.status(200).json(result.toJSON());
+    return response.status(200).json(result.toJSON());
   } else {
-    response.status(404).end();
+    return response.status(404).end();
   }
 });
 
@@ -65,9 +71,9 @@ blogsRouter.put("/api/blogs/:id", async (request, response) => {
   });
 
   if (result) {
-    response.status(200).json(result.toJSON());
+    return response.status(200).json(result.toJSON());
   } else {
-    response.status(404).end();
+    return response.status(404).end();
   }
 });
 
